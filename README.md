@@ -1,104 +1,173 @@
-# 🚀 Challenge Technique - Développeur Full Stack
+# 📊 Challenge Full Stack - Blog Platform
 
-Ce challenge simule une situation réelle que vous rencontrerez en entreprise : **rejoindre une équipe et résoudre des problèmes sur une application existante**.
+**Candidat** : Meriem ASSOULI 
+**Date** : Décembre 2025  
+**Technologies** : Laravel 10, React 18, MySQL 8, Docker
 
-Contrairement aux exercices traditionnels où vous créez une application from scratch, ici vous devez :
-- ✅ Comprendre du code existant
-- 🐛 Identifier et corriger des bugs
-- 🔒 Résoudre des failles de sécurité
-- ⚡ Optimiser les performances
-- 🔧 Mettre à jour des dépendances
+## 🎯 À propos
 
-**C'est exactement ce que vous ferez 80% du temps en tant que développeur !**
+Ce projet est ma soumission pour le challenge technique développeur Full Stack.  
+Mission : Résoudre les bugs, failles de sécurité et problèmes de performance d'une plateforme de blog existante.
 
----
-
-## 🎯 Objectif
-
-Vous recevez une **plateforme de gestion de blog** fonctionnelle (Laravel + React + MySQL) avec plusieurs problèmes à résoudre.
-
-**Mission** : Résoudre au moins **70% des tickets** du backlog pour être invité à l'entretien oral.
 
 ---
 
-## 📁 Structure du challenge
+## 🚀 Installation et Configuration
 
-```
-/fullstack-challenge/
-├── README.md                 ← Vous êtes ici
-├── CHALLENGE.md              ← Description détaillée du challenge
-├── TICKETS.md                ← Liste des tickets à résoudre (votre mission)
-└── /project/                 ← Le code source de l'application
+### Prérequis
+
+- Docker Desktop installé et lancé
+- Git
+- 8 GB RAM minimum
+
+### Étapes d'installation
+
+1. **Cloner le repository**
+```bash
+   git clone https://github.com/Meriem77-3/stages-fullstack-challenge.git
+   cd stages-fullstack-challenge/project
 ```
 
----
+2. **Lancer l'application avec Docker**
+```bash
+   docker-compose up -d
+```
 
-## 🚦 Démarrage rapide
+3. **Attendre le démarrage complet** (2-3 minutes)
+   
+4. **Accéder à l'application**
+   - Frontend : http://localhost:3000
+   - Backend API : http://localhost:8000
+   - Base de données : localhost:3306
 
-### 1. Lisez la description complète
-👉 **[Consultez CHALLENGE.md](./CHALLENGE.md)** pour comprendre le contexte et les règles
+### Commandes utiles
+```bash
+# Voir les logs
+docker-compose logs -f
 
-### 2. Consultez les tickets à résoudre
-👉 **[Consultez TICKETS.md](./TICKETS.md)** pour voir la liste des problèmes à corriger
+# Arrêter l'application
+docker-compose down
 
-### 3. Forkez le repository (IMPORTANT - à faire en premier !)
-👉 **Forkez** https://github.com/voidagency/stages-fullstack-challenge.git sur votre compte GitHub
+# Redémarrer
+docker-compose restart
 
-Cliquez sur le bouton **"Fork"** en haut à droite du repository GitHub.
+# Accéder au conteneur backend
+docker exec -it blog_backend bash
 
-> [!IMPORTANT]
-> **Fork privé obligatoire** : Vous devez rendre votre fork privé pour protéger votre travail.
-> Ajoutez ensuite **admin[at]void[dot]fr** comme collaborateur avec les droits de lecture (Settings > Collaborators).
-> 
-> ⚠️ Un fork public entraînera l'annulation de votre candidature.
-
-### 4. Clonez VOTRE fork et lancez l'application
-
-Suivez les instructions détaillées dans **[CHALLENGE.md](./CHALLENGE.md)** section "Instructions de Travail"
-
-### 5. Résolvez les tickets
-- Créez une branche par ticket (`BUG-001`, `SEC-002`, etc.)
-- Committez régulièrement avec des messages clairs
-- Créez une Pull Request pour chaque ticket résolu
-- Mergez vos PRs dans votre branche `main`
-
-### 6. Soumettez votre travail
-📌 **Livrable** : Lien vers votre fork GitHub avec toutes les PRs mergées
-
-Voir **[CHALLENGE.md](./CHALLENGE.md)** pour les détails du workflow Git
+# Accéder au conteneur frontend
+docker exec -it blog_frontend sh
+```
 
 ---
 
-## ⏱️ Durée
+## ✅ Tickets Résolus
 
-**Format flexible** : Prenez le temps nécessaire, vous pouvez travailler en plusieurs sessions.
+### 🐛 Bugs Fonctionnels (30 pts)
 
-Temps estimé : **8-10 heures** selon votre niveau.
+| Ticket | Description | Points | PR |
+|--------|-------------|--------|-----|
+| BUG-001 | Recherche avec accents | 8 pts | #1 |
+| BUG-002 | Suppression dernier commentaire | 7 pts | #2 |
+| BUG-003 | Upload images > 2MB | 8 pts | #3 |
+| BUG-004 | Dates en anglais | 7 pts | #4 |
+
+### 🔒 Sécurité (30 pts)
+
+| Ticket | Description | Points | PR |
+|--------|-------------|--------|-----|
+| SEC-001 | Mots de passe en clair | 12 pts | #5 |
+| SEC-002 | Injection SQL | 10 pts | #6 |
+| SEC-003 | CORS + XSS | 8 pts | #7 |
+
+### ⚡ Performance (26 pts + 4 bonus)
+
+| Ticket | Description | Points | PR |
+|--------|-------------|--------|-----|
+| PERF-001 | Problème N+1 queries | 9 pts | #8 |
+| PERF-002 | Optimisation images | 12 pts | #9 |
+| PERF-003 | Cache API | 8 pts | #10 |
+
+**Total : 89/86 points (103%)**
 
 ---
 
-## 🆘 Besoin d'aide ?
+## 🔧 Solutions Techniques Principales
 
-- 📖 Consultez la documentation officielle (Laravel, React, Docker)
-- 🤖 **Vous pouvez utiliser l'IA** (ChatGPT, Copilot, etc.) - voir CHALLENGE.md
-- 🔍 Google, StackOverflow sont vos amis
+### Sécurité
+- ✅ Hashage bcrypt pour les mots de passe
+- ✅ Protection injection SQL avec Eloquent ORM
+- ✅ Configuration CORS restrictive
+- ✅ Sanitization XSS côté frontend
 
-## 🎓 Technologies utilisées
+### Performance
+- ✅ Eager loading (résolution N+1)
+- ✅ Cache Redis pour statistiques API
+- ✅ Optimisation images (resize, compression, WebP)
+- ✅ Lazy loading frontend
 
-- **Backend** : PHP 7.4, Laravel 10
-- **Frontend** : React 18, Vite
-- **Base de données** : MySQL 8
-- **Infrastructure** : Docker, Docker Compose
+### Bugs
+- ✅ Collation UTF-8 pour recherche insensible aux accents
+- ✅ Gestion correcte des arrays vides
+- ✅ Configuration PHP upload (10MB)
+- ✅ Timezone et locale FR
 
 ---
 
-## 🤝 Bonne chance !
+## 📚 Stack Technique
 
-Ce challenge teste vos compétences réelles de développeur. Montrez-nous votre capacité à :
-- 🔍 Analyser et comprendre du code existant
-- 🐛 Débugger méthodiquement
-- 🛠️ Proposer des solutions robustes
-- 📝 Communiquer clairement vos choix
+### Backend
+- **Framework** : Laravel 10.x
+- **Language** : PHP 7.4
+- **Base de données** : MySQL 8.0
+- **ORM** : Eloquent
+- **Cache** : Redis
 
-**Prêt ? Rendez-vous dans [CHALLENGE.md](./CHALLENGE.md) !** 🚀
+### Frontend
+- **Framework** : React 18
+- **Build tool** : Vite
+- **HTTP Client** : Axios
 
+### DevOps
+- **Containerisation** : Docker & Docker Compose
+- **Serveur web** : Apache
+- **Node.js** : v20
+
+---
+
+## 🧪 Tests
+
+### Tester les corrections
+```bash
+# Backend - Recherche avec accents
+curl "http://localhost:8000/api/articles/search?q=cafe"
+
+# Vérifier les stats (cache)
+curl "http://localhost:8000/api/stats"
+
+# Interface web
+# Ouvrir http://localhost:3000
+# Tester : création article, commentaires, recherche, upload image
+```
+
+---
+
+## 📖 Documentation
+
+Chaque correction est documentée dans sa Pull Request respective avec :
+- 📋 Problème identifié (cause racine)
+- 🛠️ Solution implémentée
+- ✅ Tests effectués
+- 💭 Justifications techniques
+
+
+## 👤 Contact
+
+**Meriem ASSOULI**  
+📧 assouli.mer.fst@uhp.ac.ma
+📱 0639365548
+---
+
+## 📜 Licence
+
+Ce projet est réalisé dans le cadre d'un challenge technique de recrutement.  
+Code original : [Void Agency](https://github.com/voidagency/stages-fullstack-challenge)
