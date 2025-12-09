@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
-use App\Models\Article;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -14,7 +13,7 @@ class CommentController extends Controller
     public function index($articleId)
     {
         $comments = Comment::where('article_id', $articleId)
-            ->with('user')
+            ->with('user') // Chargement des infos de l'utilisateur
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -48,8 +47,13 @@ class CommentController extends Controller
 
         $comment->delete();
 
-        $remainingComments = Comment::where('article_id', $articleId)->get();
-        $firstComment = $remainingComments[0];
+        $remainingComments = Comment::where('article_id', $articleId)
+            ->with('user')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        // Vérifie s'il reste au moins un commentaire
+        $firstComment = $remainingComments->first();
 
         return response()->json([
             'message' => 'Comment deleted successfully',
@@ -70,8 +74,8 @@ class CommentController extends Controller
         ]);
 
         $comment->update($validated);
+        $comment->load('user');
 
         return response()->json($comment);
     }
 }
-
