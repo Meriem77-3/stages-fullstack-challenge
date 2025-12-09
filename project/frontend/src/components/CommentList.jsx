@@ -24,9 +24,7 @@ function CommentList({ articleId }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!newComment.trim()) {
-      return;
-    }
+    if (!newComment.trim()) return;
 
     try {
       await createComment({
@@ -34,7 +32,6 @@ function CommentList({ articleId }) {
         user_id: 1, // Mock user ID
         content: newComment,
       });
-      
       setNewComment('');
       fetchComments(); // Refresh comments
     } catch (error) {
@@ -53,9 +50,7 @@ function CommentList({ articleId }) {
     }
   };
 
-  if (loading) {
-    return <div>Chargement des commentaires...</div>;
-  }
+  if (loading) return <div>Chargement des commentaires...</div>;
 
   return (
     <div>
@@ -76,10 +71,10 @@ function CommentList({ articleId }) {
                 position: 'relative'
               }}
             >
-              <div 
-                dangerouslySetInnerHTML={{ __html: comment.content }}
-                style={{ marginBottom: '0.5rem' }}
-              />
+              {/* ✅ Contenu rendu de façon sécurisée */}
+              <div style={{ marginBottom: '0.5rem' }}>
+                {comment.content}
+              </div>
               
               <div style={{ fontSize: '0.85em', color: '#7f8c8d' }}>
                 — {comment.user?.name || 'Utilisateur'}
@@ -122,4 +117,3 @@ function CommentList({ articleId }) {
 }
 
 export default CommentList;
-
