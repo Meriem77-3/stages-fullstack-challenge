@@ -15,20 +15,28 @@ return [
     |
     */
 
+    // Appliquer CORS uniquement sur les API
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
+    // Autoriser toutes les méthodes HTTP
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // Définir les origines autorisées (frontend React)
+    'allowed_origins' => ['http://localhost:3000'],
 
+    // Patterns supplémentaires pour autoriser des origines dynamiques si besoin
     'allowed_origins_patterns' => [],
 
+    // Autoriser tous les headers
     'allowed_headers' => ['*'],
 
+    // Headers exposés au frontend
     'exposed_headers' => [],
 
+    // Temps de cache du prévol CORS
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    // Support des cookies / auth cross-origin
+    'supports_credentials' => true,
 
 ];
