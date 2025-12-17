@@ -20,13 +20,15 @@ class AuthController extends Controller
 
         $user = User::where('email', $credentials['email'])->first();
 
-        if (!$user) {
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        if ($user->password !== $credentials['password']) {
-            return response()->json(['message' => 'Invalid credentials'], 401);
-        }
+        // Générer un token simple (optionnel selon ton projet)
+        $token = base64_encode(str_random(40));
+
+        // stocker le token dans la DB si tu veux
+        // $user->update(['api_token' => $token]);
 
         return response()->json([
             'message' => 'Login successful',
@@ -35,6 +37,7 @@ class AuthController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
             ],
+            'token' => $token, // facultatif
         ]);
     }
 
@@ -52,7 +55,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'password' => $validated['password'],
+            'password' => Hash::make($validated['password']), // 🔥 HASH CORRIGÉ
         ]);
 
         return response()->json([
@@ -89,4 +92,3 @@ class AuthController extends Controller
         ]);
     }
 }
-
