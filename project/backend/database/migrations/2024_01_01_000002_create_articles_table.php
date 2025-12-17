@@ -3,7 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
 
 class CreateArticlesTable extends Migration
 {
@@ -14,17 +13,35 @@ class CreateArticlesTable extends Migration
      */
     public function up()
     {
-        DB::statement('CREATE TABLE articles (
-            id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-            title VARCHAR(255) COLLATE latin1_general_ci,
-            content TEXT COLLATE latin1_general_ci,
-            author_id BIGINT UNSIGNED NOT NULL,
-            image_path VARCHAR(255) NULL,
-            published_at TIMESTAMP NULL,
-            created_at TIMESTAMP NULL,
-            updated_at TIMESTAMP NULL,
-            FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
-        ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci');
+        Schema::create('articles', function (Blueprint $table) {
+            $table->id();
+
+            // Collation compatible accents
+            $table->string('title')
+                  ->collation('utf8mb4_unicode_ci');
+
+            $table->text('content')
+                  ->collation('utf8mb4_unicode_ci');
+
+            $table->unsignedBigInteger('author_id');
+
+            $table->string('image_path')->nullable();
+            $table->timestamp('published_at')->nullable();
+
+            $table->timestamps();
+
+            // Foreign key
+            $table->foreign('author_id')
+                  ->references('id')
+                  ->on('users')
+                  ->onDelete('cascade');
+        });
+
+        // Important : forcer charset + collation de la table
+        Schema::table('articles', function (Blueprint $table) {
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
+        });
     }
 
     /**
@@ -37,4 +54,3 @@ class CreateArticlesTable extends Migration
         Schema::dropIfExists('articles');
     }
 }
-
