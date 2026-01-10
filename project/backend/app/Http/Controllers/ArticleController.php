@@ -91,42 +91,44 @@ class ArticleController extends Controller
     /**
      * Store a newly created article.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'content' => 'required',
-            'author_id' => 'required|exists:users,id',
-            'image_path' => 'nullable|string',
-        ]);
+    use Intervention\Image\Facades\Image;
 
-        $article = Article::create([
-            'title' => $validated['title'],
-            'content' => $validated['content'],
-            'author_id' => $validated['author_id'],
-            'image_path' => $validated['image_path'] ?? null,
-            'published_at' => now(),
-        ]);
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'title' => 'required|max:255',
+        'content' => 'required',
+        'author_id' => 'required|exists:users,id',
+        'image' => 'nullable|image|max:10240', // max 10MB
+    ]);
 
-        return response()->json($article, 201);
+    $imagePath = null;
+
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $imageName = time() . '_' . $file->getClientOriginalName();
+
+        // Redimensionner et compresser l'image
+        $image = Image::make($file)
+                      ->resize(1200, null, function ($constraint) {
+                          $constraint->aspectRatio();
+                      })
+                      ->encode('jpg', 80);
+
+        $image->save(storage_path('app/public/' . $imageName));
+        $imagePath = 'storage/' . $imageName;
     }
 
-    /**
-     * Update the specified article.
-     */
-    public function update(Request $request, $id)
-    {
-        $article = Article::findOrFail($id);
+    $article = Article::create([
+        'title' => $validated['title'],
+        'content' => $validated['content'],
+        'author_id' => $validated['author_id'],
+        'image_path' => $imagePath,
+        'published_at' => now(),
+    ]);
 
-        $validated = $request->validate([
-            'title' => 'sometimes|required|max:255',
-            'content' => 'sometimes|required',
-        ]);
-
-        $article->update($validated);
-
-        return response()->json($article);
-    }
+    return response()->json($article, 201);
+}
 
     /**
      * Remove the specified article.
