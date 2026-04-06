@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Cache;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
@@ -39,7 +40,9 @@ class ArticleController extends Controller
      */
     public function show($id)
     {
-        $article = Article::with(['author', 'comments.user'])->findOrFail($id);
+        $articles = Cache::remember('articles.index', 300, function () {
+    return Article::with(['author', 'comments'])->get();
+});
 
         return response()->json([
             'id' => $article->id,
@@ -107,6 +110,7 @@ class ArticleController extends Controller
             'image_path' => $validated['image_path'] ?? null,
             'published_at' => now(),
         ]);
+        Cache::forget('articles.index');
 
         return response()->json($article, 201);
     }
@@ -124,6 +128,8 @@ class ArticleController extends Controller
         ]);
 
         $article->update($validated);
+        Cache::forget('articles.index');
+
 
         return response()->json($article);
     }
@@ -135,6 +141,8 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
         $article->delete();
+        Cache::forget('articles.index');
+
 
         return response()->json(['message' => 'Article deleted successfully']);
     }
